@@ -1,10 +1,12 @@
 import { Sequelize } from "sequelize";
 import { configDotenv } from "dotenv";
+
+
 configDotenv()
 
 
 
-export const sequelize=new Sequelize(
+const sequelize=new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USER,
     process.env.DB_PASSWORD,
@@ -18,6 +20,8 @@ export const sequelize=new Sequelize(
 export const startDb=async()=>{
     try{
         await sequelize.authenticate()
+        const { configureAssociations } = await import('../models/associations.js');
+    configureAssociations();
         await sequelize.sync({ force:false})
         console.log("conexion exitosa a la base de datos")
     } catch(error){
@@ -25,3 +29,5 @@ export const startDb=async()=>{
         )
     }
 }
+
+export default sequelize

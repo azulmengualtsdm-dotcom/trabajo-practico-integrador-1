@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import tag from "../models/tag.model";
+import tagmodel from "../models/tag.model";
 
 export const validateTagId = [
   param("id")
@@ -24,7 +24,7 @@ export const createTagValidation = [
       return true;
     })
     .custom(async (name) => {
-      const tagExists = await Tag.findOne({ where: { name } });
+      const tagExists = await tagmodel.findOne({ where: { name } });
       if (tagExists) {
         throw new Error("Ya existe una etiqueta registrada con ese mismo nombre");
       }

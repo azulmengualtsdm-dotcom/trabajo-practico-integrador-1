@@ -66,7 +66,7 @@ export const updateUser=async(req, res)=>{
     const { id } = req.params;
     const limData = matchedData(req);
 
-    const user = await User.findByPk(id);
+    const user = await usermodel.findByPk(id);
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
@@ -82,6 +82,18 @@ export const updateUser=async(req, res)=>{
     res.status(400).json({ error: 'Error al actualizar el usuario', detalles: error.message });
   }
 };
+
+export const deleteUser=async(req, res)=>{
+    try{
+        const {id}=req.params
+        const user=await usermodel.findByPk(id)
+        if(!user){
+            return res.status(404).json({error:"no se encuentra el usuario", detalles:error.message})
+        }
+    }catch(error){
+        res.status(500).json({error:"error al eliminar usuario", detalles:error.message})
+    }
+}
 
 
 

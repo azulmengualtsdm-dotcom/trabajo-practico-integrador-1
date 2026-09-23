@@ -1,8 +1,8 @@
-import usermodel from "../models/users.model";
-import profile from "../models/profile.model";
+import usermodel from "../models/users.model.js";
+import profile from "../models/profile.model.js";
 import { matchedData } from "express-validator";
 import bcrypt from 'bcrypt'
-import article from "../models/article.model";
+import article from "../models/article.model.js";
 
 export const getalluser=async (req, res )=>{
 try {
@@ -13,7 +13,7 @@ const users=await usermodel.findAll({
 })
 res.status(200).json(users)
 }catch(error){
-    res.status(404).json({error:"hubo un error al obtener los usuarios", detalles:error.message})
+    res.status(500).json({error:"hubo un error al obtener los usuarios", detalles:error.message})
 
 }
 }
@@ -22,10 +22,10 @@ export const getUserbyId=async(req, res)=>{
     try{
     const {id}=req.params
     const user=await usermodel.findByPk(id,{attributes:['id','username', 'email', 'role'],
-        include:[{model:profile, as:'profile'},{model:article, as:"article"}]
+        include:[{model:profile, as:'profile'},{model:article, as:"articles"}]
     })
     if(!user){
-        res.status(404).json({error:"no existe el usuario"})
+        return res.status(404).json({error:"no existe el usuario"})
     }
     res.status(200).json(user)
 }catch(error){
@@ -33,9 +33,9 @@ res.status(500).json({error:"hay un error al obtener el usuario", detalles:error
 }
 }
 
-const createUser=async(req, res)=>{
+export const createUser=async(req, res)=>{
     try{
-        limData=matchedData(req)
+    const limData=matchedData(req)
     const {username, email, password, last_name, first_name}=req.body
     const salt=await bcrypt.genSalt(10)
     const encryptedpassword=await bcrypt.hash(password, salt)
@@ -83,17 +83,20 @@ export const updateUser=async(req, res)=>{
   }
 };
 
-export const deleteUser=async(req, res)=>{
-    try{
-        const {id}=req.params
-        const user=await usermodel.findByPk(id)
-        if(!user){
-            return res.status(404).json({error:"no se encuentra el usuario", detalles:error.message})
+export const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await usermodel.findByPk(id);
+        
+        if (!user) {
+            return res.status(404).json({ error: "no se encuentra el usuario" }); // ✅ Corregido: Removida la variable error inexistente
         }
-    }catch(error){
-        res.status(500).json({error:"error al eliminar usuario", detalles:error.message})
+        
+        await user.destroy();
+        res.status(200).json({ mensaje: 'Usuario eliminado lógicamente de forma correcta' });
+    } catch (error) {
+        res.status(500).json({ error: "error al eliminar usuario", detalles: error.message });
     }
 }
-
 
 

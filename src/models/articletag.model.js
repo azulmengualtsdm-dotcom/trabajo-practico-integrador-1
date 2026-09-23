@@ -7,14 +7,13 @@ const articletag= sequelize.define("ArticleTag",{
         primaryKey:true,
         autoIncrement:true
     },
-    aticle_id:{
+    article_id:{
         type:DataTypes.INTEGER,
-        allowNull:false,
+        allowNull:false},
         tag_id:{
             type:DataTypes.INTEGER,
             allowNull:false
         }
-    }
-}
+    },{timestamps:true, underscored:true, paranoid:true}
 )
 export default articletag

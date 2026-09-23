@@ -60,7 +60,7 @@ export const deleteTag=async(req, res)=>{
         const {id}=req.params
         const tag=await tagmodel.findByPk(id)
         if(!tag){
-            return res.status(404).json({error:'no existe esa etiqueta', detalles:error.message})
+            return res.status(404).json({error:'no existe esa etiqueta'})
         }
 
         await tag.destroy()

@@ -20,12 +20,12 @@ const sequelize=new Sequelize(
 export const startDb=async()=>{
     try{
         await sequelize.authenticate()
-        const { configureAssociations } = await import('../models/associations.js');
+        const  { configureAssociations }  = await import('../models/associations.js');
     configureAssociations();
         await sequelize.sync({ force:false})
         console.log("conexion exitosa a la base de datos")
     } catch(error){
-        console.log("error a conectar la base de datos", error.mesage
+        console.log("error a conectar la base de datos", error.message
         )
     }
 }

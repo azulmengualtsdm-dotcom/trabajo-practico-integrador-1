@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize  from "../config/database.js";
-import { toDefaultValue } from "sequelize/lib/utils";
+
 
 const article=sequelize.define("Article",{
     id:{

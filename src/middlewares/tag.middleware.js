@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import tagmodel from "../models/tag.model";
+import tagmodel from "../models/tag.model.js";
 
 export const validateTagId = [
   param("id")

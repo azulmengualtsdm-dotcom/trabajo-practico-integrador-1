@@ -1,12 +1,16 @@
 import { Router } from "express";
-import { register, login, getProfile, updateProfile, logout} from "../controllers/auth.controller.js";
-import { createUserValidation, updateUserValidation, validateUserId } from "../middlewares/user.middleware.js";
-import  authMiddleware, { adminMiddleware }  from "../middlewares/auth.middleware.js";
+import { createUserValidation, updateUserValidation, validateUserId, handleErrors } from "../middlewares/user.middleware.js";
+import { register, login, getUser, updateProfile, logout} from "../controllers/auth.controller.js";
+import { createUser } from "../controllers/user.controllers.js";
+
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const routerAuth=Router()
 
-routerAuth.post('/register', createUserValidation, register)
+routerAuth.post('/register', createUserValidation, handleErrors, register)
 routerAuth.post('/login', login)
-routerAuth.get('/profile', authMiddleware, adminMiddleware , getProfile)
-routerAuth.put('/profile', authMiddleware, updateUserValidation, validateUserId, updateProfile)
+routerAuth.get('/profile', authMiddleware, getUser)
+routerAuth.put('/profile', authMiddleware, updateUserValidation, handleErrors, updateProfile)
 routerAuth.post('/logout', authMiddleware, logout)
+
+export default routerAuth

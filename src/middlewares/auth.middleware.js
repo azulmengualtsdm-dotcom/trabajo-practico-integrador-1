@@ -1,9 +1,9 @@
-import { verifyToken } from "../helpers/jwt.helper"
+import { verifyToken } from "../helpers/jwt.helper.js"
 
 
 export const authMiddleware=async(req, res, next)=>{
     try{
-    const token=req.cookie.token //busca en cookies el encriptado relacionado al usuario
+    const token=req.cookies.token //busca en cookies el encriptado relacionado al usuario
     if(!token){
         return res.status(401).json({error:'acceso denegado o no iniciado'})
     }

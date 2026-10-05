@@ -8,18 +8,18 @@ import { generateToken } from "../helpers/jwt.helper.js";
 export const register=async(req, res)=>{
     try{
         const limData=matchedData(req)
-    const {first_name, last_name, birth_date, username, password, email}=req.body
+    const {first_name, last_name, username, password, email, role }=limData
     const encriptedPassword=await hashPassword(password)
     const newUser=await usermodel.create({
         username,
         email,
-        password:encriptedPassword
+        password:encriptedPassword,
+        role
     })
     const newProfile=await profile.create({
         user_id:newUser.id,
         first_name,
-        last_name,
-        birth_date
+        last_name
     })
 
     res.status(201).json({
@@ -27,6 +27,7 @@ export const register=async(req, res)=>{
             id:newUser.id,
             username:newUser.username,
             email:newUser.email,
+            role:newUser.role || "user",
             profile:newProfile
         }
 
@@ -79,7 +80,7 @@ export const logout=async(req, res)=>{
 export const getUser=async(req, res)=>{
     try{
     const user=await usermodel.findByPk(req.user.id, {
-        attributes:['id', 'username', 'email'], include:{model:profile, as:'profile'}
+        attributes:['id', 'username', 'email'], include:{model:profile, as:'Profile'}
     })
         if(!user){
             return res.status(404).json({error:'no se encontro el usuario'})
@@ -93,7 +94,7 @@ export const getUser=async(req, res)=>{
     export const updateProfile = async (req, res) => {
         try {
             const limData = matchedData(req)
-            const userProfile = await profile.findOne({ where: { user_id: req.usermodel.id } });
+            const userProfile = await profile.findOne({ where: { user_id: req.user.id } });
             if (!userProfile) {
                 return res.status(404).json({ error: 'Perfil no encontrado' });
             }

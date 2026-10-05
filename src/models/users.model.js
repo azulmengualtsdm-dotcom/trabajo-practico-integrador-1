@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
-import profile from "./profile.model.js";
+
 
 const usermodel= sequelize.define("User", {
         id:{
@@ -24,7 +24,8 @@ const usermodel= sequelize.define("User", {
         },
         role:{
             type:DataTypes.ENUM("user", "admin"),
-            toDefaultValue:"user"
+            toDefaultValue:"user",
+            allowNull:false
         }
     },
 {

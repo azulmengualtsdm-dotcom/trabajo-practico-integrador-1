@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { createtag, getalltags, updatetag, deleteTag, getbyIdTag } from "../controllers/tag.controller.js";
+import { createtag, getalltag, updatetag, deleteTag, getbyIdTag } from "../controllers/tag.controllers.js";
 
-import { validateTagId, createTagValidation } from "../validators/tag.validator.js";
-import { handleErrors } from "../middlewares/handleErrors.middleware.js";
+import { validateTagId, createTagValidation } from "../middlewares/tag.middleware.js"
+
 
 import { authMiddleware, adminMiddleware } from "../middlewares/auth.middleware.js";
 
 const tagRouter = Router();
 
-tagRouter.get("/", getalltags);
+tagRouter.get("/", getalltag);
 tagRouter.get("/:id", validateTagId, getbyIdTag);
 
 tagRouter.post("/", authMiddleware, adminMiddleware, createTagValidation, createtag);

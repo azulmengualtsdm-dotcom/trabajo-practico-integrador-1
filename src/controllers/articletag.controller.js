@@ -1,6 +1,6 @@
 import articletag from "../models/articletag.model.js";
 import article from "../models/article.model.js";
-import usermodel from "../models/users.model.js";
+
 
 export const addtagArticle=async(req, res)=>{
     try{

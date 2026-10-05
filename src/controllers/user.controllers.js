@@ -9,7 +9,7 @@ try {
 const users=await usermodel.findAll({
     attributes:[
         'id', 'username' , 'email', 'role' 
-    ], include:{model:profile, as:'profile'}
+    ], include:{model:profile, as:'Profile'}
 })
 res.status(200).json(users)
 }catch(error){
@@ -22,7 +22,7 @@ export const getUserbyId=async(req, res)=>{
     try{
     const {id}=req.params
     const user=await usermodel.findByPk(id,{attributes:['id','username', 'email', 'role'],
-        include:[{model:profile, as:'profile'},{model:article, as:"articles"}]
+        include:[{model:profile, as:'Profile'},{model:article, as:"Articles"}]
     })
     if(!user){
         return res.status(404).json({error:"no existe el usuario"})
@@ -36,13 +36,14 @@ res.status(500).json({error:"hay un error al obtener el usuario", detalles:error
 export const createUser=async(req, res)=>{
     try{
     const limData=matchedData(req)
-    const {username, email, password, last_name, first_name}=req.body
+    const {username, email, password, last_name, first_name, role}=limData
     const salt=await bcrypt.genSalt(10)
     const encryptedpassword=await bcrypt.hash(password, salt)
         const newUser = await usermodel.create({
       username,
       email,
-      password: encryptedpassword
+      password: encryptedpassword,
+      role:limData.role || "user" || newUser.role
     });
 
     const newProfile=await profile.create({
@@ -53,7 +54,7 @@ export const createUser=async(req, res)=>{
 
         res.status(201).json({
       mensaje: 'Usuario y perfil creados con éxito',
-      usuario: { id: newUser.id, username: newUser.username, email: newUser.email, profile: newProfile }
+      usuario: { id: newUser.id, username: newUser.username, email: newUser.email, role: newUser.role, profile: newProfile }
     })
 }catch(error){
     res.status(500).json({error:"hubo un error al crear el usuario y el perfil", detalles:error.message})

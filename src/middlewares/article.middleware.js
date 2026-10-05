@@ -1,8 +1,5 @@
 import { body, param } from "express-validator";
-import article from "../models/article.model";
-
-import { body, param } from "express-validator";
-import Article from "../models/article.model.js";
+import article from "../models/article.model.js";
 
 export const validateArticleId = [
   param("id")

@@ -5,9 +5,18 @@ import articleRouter from "./src/routes/article.routes.js"
 import tagRouter from "./src/routes/tag.routes.js"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
+import cors from "cors"
 
 dotenv.config();
 const app=express()
+
+app.use(cors({
+    origin:  "http://localhost:5173/",
+    credentials:true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ["Content-Type", "Authorization"]
+    
+}))
 app.use(express.json())
 app.use(cookieParser());
 const port=process.env.PORT || 3000
